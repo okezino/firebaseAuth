@@ -21,15 +21,11 @@ class Registration : AppCompatActivity() {
     lateinit var email: EditText
     lateinit var password: EditText
     lateinit var regButton: Button
-    lateinit var firebaseAuth: FirebaseAuth
     lateinit var progress: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
-        firebaseAuth = FirebaseAuth.getInstance()
-
-
 
 
         fullName = findViewById(R.id.registration_name)
@@ -42,13 +38,11 @@ class Registration : AppCompatActivity() {
         regButton.setOnClickListener {
             progress.isVisible = true
             Toast.makeText(this, fullName.text, Toast.LENGTH_SHORT).show()
-            firebaseAuth.createUserWithEmailAndPassword(
+            App.firebaseAuthInstance.createUserWithEmailAndPassword(
                 email.text.toString(),
                 password.text.toString()
             )
                 .addOnCompleteListener { p0 ->
-                    Log.d("MainActivity", p0.result.toString())
-
                     App.firebaseAuthInstance.currentUser!!.sendEmailVerification()
 
                     if (p0.isSuccessful) {
@@ -57,24 +51,15 @@ class Registration : AppCompatActivity() {
                             "name" to fullName.text.toString(),
                             "email" to email.text.toString(),
                             "phone" to phone.text.toString(),
-                            "password" to password.text.toString()
-                        )
-
+                            )
                         App.documentReference.set(hash).addOnCompleteListener {
-                            if(it.isSuccessful){
-                                Log.d("MainActivity", "Added")
-                            }else{
+                            if(!it.isSuccessful){
                                 Throwable(it.exception)
-                                Log.d("MainActivity", "failed")
                             }
                         }
-
-
-                        Toast.makeText(this@Registration, "registered", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, Login::class.java))
-                        Log.d("MainActivity", "Logged_In")
                     } else {
-                        Toast.makeText(this@Registration, "wahala", Toast.LENGTH_SHORT).show()
+
                         Throwable(p0.exception)
                     }
                 }

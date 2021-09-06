@@ -18,7 +18,6 @@ class Login : AppCompatActivity() {
     lateinit var loginButton: Button
     lateinit var sendLink: Button
     lateinit var firebaseAuth: FirebaseAuth
-//    lateinit var forget: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +28,7 @@ class Login : AppCompatActivity() {
         password = findViewById(R.id.login_password)
         loginButton = findViewById(R.id.login_btn)
         sendLink = findViewById(R.id.password_link)
-//        forget = findViewById(R.id.login_forget_password)
+
 
         loginButton.setOnClickListener {
             App.firebaseAuthInstance.signInWithEmailAndPassword(
@@ -43,25 +42,15 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-
-
-
         fun sendResetPasswordLink(email: String) {
-
             App.firebaseAuthInstance.sendPasswordResetEmail(email.trim()).addOnSuccessListener {
                 Toast.makeText(this, "Link has been sent to your email", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener {
                 Throwable(it)
             }
-
         }
-
-
         sendLink.setOnClickListener {
-
             val edit = EditText(this)
-
-
             val passwordResetAlertDialog: AlertDialog.Builder = AlertDialog.Builder(this).apply {
 
                 setTitle("Reset Password")
@@ -76,14 +65,8 @@ class Login : AppCompatActivity() {
                 setNegativeButton("No") { p0, p1 ->
                     p0.dismiss()
                 }
-
             }
             passwordResetAlertDialog.create().show()
-
         }
-
-
-
-
     }
 }

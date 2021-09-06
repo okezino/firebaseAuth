@@ -10,40 +10,30 @@ import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
-    lateinit var firebaseAuth : FirebaseAuth
-    lateinit var button : Button
-    lateinit var verify : TextView
+
+    lateinit var button: Button
+    lateinit var verify: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        firebaseAuth = FirebaseAuth.getInstance()
+
         button = findViewById(R.id.button_logout)
         verify = findViewById(R.id.verification)
 
 
-        if(firebaseAuth.currentUser == null) {
+        if (App.firebaseAuthInstance.currentUser == null) {
             startActivity(Intent(this, Login::class.java))
             finish()
-
         }
 
-
-        if(App.firebaseAuthInstance.currentUser!!.isEmailVerified){
-
-            verify.isVisible = false
-
-        }
-
-
+        if (App.firebaseAuthInstance.currentUser!!.isEmailVerified) verify.isVisible = false
 
         button.setOnClickListener {
-            firebaseAuth.signOut()
+            App.firebaseAuthInstance.signOut()
             startActivity(Intent(this, Login::class.java))
             finish()
         }
-        var res = firebaseAuth.currentUser?.email ?: "fuck"
 
-      Log.d("MainActivity", res)
     }
 }
