@@ -29,7 +29,7 @@ class App : Application() {
             firebaseAuthInstance.currentUser?.uid
         }
 
-       private val documentReference by lazy {
+       val documentReference by lazy {
             fstore.collection("users").document(userId!!)
        }
 

@@ -49,13 +49,25 @@ class Registration : AppCompatActivity() {
                 .addOnCompleteListener { p0 ->
                     Log.d("MainActivity", p0.result.toString())
 
+                    App.firebaseAuthInstance.currentUser!!.sendEmailVerification()
+
                     if (p0.isSuccessful) {
                         progress.isVisible = false
                         val hash = hashMapOf(
                             "name" to fullName.text.toString(),
                             "email" to email.text.toString(),
-                            "phone" to phone.text.toString()
+                            "phone" to phone.text.toString(),
+                            "password" to password.text.toString()
                         )
+
+                        App.documentReference.set(hash).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                Log.d("MainActivity", "Added")
+                            }else{
+                                Throwable(it.exception)
+                                Log.d("MainActivity", "failed")
+                            }
+                        }
 
 
                         Toast.makeText(this@Registration, "registered", Toast.LENGTH_SHORT).show()
