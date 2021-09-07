@@ -1,5 +1,6 @@
 package com.example.firebaseauth
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,12 @@ import java.util.zip.Inflater
 
 class AuthAdapter : RecyclerView.Adapter<AuthAdapter.AdaptViewHolder>() {
 
-    var listOfUsers = mutableListOf<Registered>()
+    var listOfUsers = mutableListOf<Registered>(Registered("okeh","okeh","simon"))
 
     class AdaptViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
-        var firstName = itemView.findViewById<TextView>(R.id.registration_name)
-        val email = itemView.findViewById<TextView>(R.id.registration_email)
+        var firstName = itemView.findViewById<TextView>(R.id.name)
+        var email = itemView.findViewById<TextView>(R.id.email)
 
 
     }
@@ -36,6 +37,13 @@ class AuthAdapter : RecyclerView.Adapter<AuthAdapter.AdaptViewHolder>() {
 
     override fun getItemCount(): Int {
         return listOfUsers.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setupUsers(list : MutableList<Registered>){
+        listOfUsers.clear()
+        listOfUsers = list
+        notifyDataSetChanged()
     }
 
 
