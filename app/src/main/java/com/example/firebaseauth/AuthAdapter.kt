@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.firebaseauth.model.LoginUser
 import com.example.firebaseauth.model.Registered
 import java.util.zip.Inflater
 
-class AuthAdapter : RecyclerView.Adapter<AuthAdapter.AdaptViewHolder>() {
+class AuthAdapter( var listOfUsers : MutableList<LoginUser>) : RecyclerView.Adapter<AuthAdapter.AdaptViewHolder>() {
 
-    var listOfUsers = mutableListOf<Registered>(Registered("okeh","okeh","simon"))
+
 
     class AdaptViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
@@ -38,13 +39,5 @@ class AuthAdapter : RecyclerView.Adapter<AuthAdapter.AdaptViewHolder>() {
     override fun getItemCount(): Int {
         return listOfUsers.size
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setupUsers(list : MutableList<Registered>){
-        listOfUsers.clear()
-        listOfUsers = list
-        notifyDataSetChanged()
-    }
-
 
 }

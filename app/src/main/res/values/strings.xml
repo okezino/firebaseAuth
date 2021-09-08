@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FirebaseAuth</string>
     <string name="firebase_auth">FireBase Auth</string>
-    <string name="verify_your_account_to_view_list_of_all_users">verify your account to view list of all users</string>
+    <string name="verify_your_account_to_view_list_of_all_users">click on the verification link sent to your email to view dashboard and login again if you re verified,  click to Resend Link </string>
     <string name="sample_name">sample name</string>
     <string name="sample">sample</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.firebaseauth
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
@@ -23,6 +25,7 @@ class Registration : AppCompatActivity() {
     lateinit var regButton: Button
     lateinit var progress: ProgressBar
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
@@ -37,32 +40,41 @@ class Registration : AppCompatActivity() {
 
         regButton.setOnClickListener {
             progress.isVisible = true
-            Toast.makeText(this, fullName.text, Toast.LENGTH_SHORT).show()
-            App.firebaseAuthInstance.createUserWithEmailAndPassword(
-                email.text.toString(),
-                password.text.toString()
-            )
-                .addOnCompleteListener { p0 ->
-                    App.firebaseAuthInstance.currentUser!!.sendEmailVerification()
+            if(emailValidator(email.text.toString()) && password.text.toString().length > 5){
 
-                    if (p0.isSuccessful) {
-                        progress.isVisible = false
-                        val hash = hashMapOf(
-                            "name" to fullName.text.toString(),
-                            "email" to email.text.toString(),
-                            "phone" to phone.text.toString(),
+                App.firebaseAuthInstance.createUserWithEmailAndPassword(
+                    email.text.toString(),
+                    password.text.toString()
+                )
+                    .addOnCompleteListener { p0 ->
+                        App.firebaseAuthInstance.currentUser!!.sendEmailVerification()
+
+                        if (p0.isSuccessful) {
+                            progress.isVisible = false
+                            val hash = hashMapOf(
+                                "name" to fullName.text.toString(),
+                                "email" to email.text.toString(),
+                                "phone" to phone.text.toString(),
                             )
-                        App.documentReference.set(hash).addOnCompleteListener {
-                            if(!it.isSuccessful){
-                                Throwable(it.exception)
+                            App.documentReference.set(hash).addOnCompleteListener {task->
+                                if(!task.isSuccessful){
+                                    Throwable(task.exception)
+                                }
                             }
-                        }
-                        startActivity(Intent(this, Login::class.java))
-                    } else {
+                            startActivity(Intent(this, Login::class.java))
+                        } else {
 
-                        Throwable(p0.exception)
+                            Throwable(p0.exception)
+                        }
                     }
-                }
+
+            }else{
+
+                Snackbar.make(it, "Invalid email or Password is less than 6 digit", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(R.color.purple_500).show()
+                progress.isVisible = false
+            }
+
         }
     }
 
